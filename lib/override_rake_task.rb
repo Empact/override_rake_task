@@ -9,8 +9,8 @@ def remove_task(task_name)
   Rake.application.remove_task(task_name)
 end
 
-def override_task(args, &block)
-  name, deps = Rake.application.resolve_args([args])  
+def override_task(*args, &block)
+  name, params, deps = Rake.application.resolve_args(args)
   remove_task Rake.application[name].name
-  task(args, &block)
+  Rake::Task.define_task({name => deps}, &block)
 end
